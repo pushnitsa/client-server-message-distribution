@@ -1,8 +1,5 @@
-﻿using System.Net;
-using System.Net.Sockets;
-using System.Text;
-
-const int Port = 8005;
+﻿
+/*const int Port = 8005;
 var ipPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), Port);
 var listenSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
@@ -43,6 +40,10 @@ try
 catch (Exception ex)
 {
     Console.WriteLine(ex.Message);
-}
+}*/
 
+using Server.Chat;
 
+var server = new HostService();
+
+server.Listen();
