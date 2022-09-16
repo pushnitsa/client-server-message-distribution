@@ -1,9 +1,18 @@
-﻿namespace WebApp.HostedServices;
+﻿using Server.Host;
+
+namespace WebApp.HostedServices;
 
 public class HostedConnectionServer : BackgroundService
 {
-    protected override Task ExecuteAsync(CancellationToken stoppingToken)
+    private readonly IHostService _hostService;
+
+    public HostedConnectionServer(IHostService hostService)
     {
-        return Task.CompletedTask;
+        _hostService = hostService;
+    }
+
+    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+    {
+        await _hostService.ListenAsync(stoppingToken);
     }
 }
