@@ -25,22 +25,14 @@ public class ChatClient
         {
             while (true)
             {
-                try
-                {
-                    var message = GetMessage();
-                    Console.WriteLine($"{Id}: {message}");
-                    _hostService.BroadcastMessage(message, Id);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"{Id}: {ex.Message}");
-                    break;
-                }
+                var message = GetMessage();
+                Console.WriteLine($"{Id}: {message}");
+                _hostService.BroadcastMessage(message, Id);
             }
         }
         catch (Exception ex)
         {
-            Console.WriteLine(ex.Message);
+            Console.WriteLine($"{Id}: {ex.Message}");
         }
         finally
         {

@@ -1,4 +1,4 @@
-﻿using System.Net;
+﻿/*using System.Net;
 using System.Net.Sockets;
 using System.Text;
 
@@ -38,4 +38,10 @@ catch (Exception ex)
     Console.WriteLine(ex.Message);
 }
 
-Console.Read();
+Console.Read();*/
+
+using Client.Chat;
+
+var chatClient = new ChatClient();
+
+chatClient.Start();
