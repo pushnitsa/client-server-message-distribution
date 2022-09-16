@@ -1,4 +1,6 @@
-﻿using System.Net;
+﻿using Microsoft.Extensions.Options;
+using Server.Configuration;
+using System.Net;
 using System.Net.Sockets;
 using System.Text;
 
@@ -7,6 +9,12 @@ public class HostService
 {
     private TcpListener _tcpListener;
     private readonly List<ChatClient> _clients = new List<ChatClient>();
+    private readonly ConnectionServerOptions _options;
+
+    public HostService(IOptions<ConnectionServerOptions> serverOptions)
+    {
+        _options = serverOptions.Value;
+    }
 
     protected internal void AddConnection(ChatClient chatClient)
     {
@@ -27,7 +35,7 @@ public class HostService
     {
         try
         {
-            _tcpListener = new TcpListener(IPAddress.Any, 8888);
+            _tcpListener = new TcpListener(IPAddress.Any, _options.ServerPort);
             _tcpListener.Start();
             Console.WriteLine("Server start");
 
