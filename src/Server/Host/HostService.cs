@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Server.Configuration;
 using Server.Manager;
 using System.Net;
@@ -13,16 +14,19 @@ public class HostService : IHostService, IBroadcast
     private readonly ConnectionServerOptions _options;
     private readonly IClientManager _clientManager;
     private readonly IHaveClients _clientsStorage;
+    private readonly ILogger<HostService> _logger;
 
     public HostService(
         IOptions<ConnectionServerOptions> serverOptions,
         IClientManager clientManager,
-        IHaveClients clientsStorage
+        IHaveClients clientsStorage,
+        ILogger<HostService> logger
         )
     {
         _options = serverOptions.Value;
         _clientManager = clientManager;
         _clientsStorage = clientsStorage;
+        _logger = logger;
     }
 
     public async Task ListenAsync(CancellationToken cancellationToken)
@@ -31,6 +35,8 @@ public class HostService : IHostService, IBroadcast
         {
             _tcpListener = new TcpListener(IPAddress.Any, _options.ServerPort);
             _tcpListener.Start();
+
+            _logger.LogInformation("Connection server start with: {_options.ServerPort} port.", _options.ServerPort);
 
             while (!cancellationToken.IsCancellationRequested)
             {
@@ -41,7 +47,7 @@ public class HostService : IHostService, IBroadcast
         }
         catch (Exception ex)
         {
-            // Add logging
+            _logger.LogError(ex, ex.Message);
         }
         finally
         {
@@ -52,18 +58,24 @@ public class HostService : IHostService, IBroadcast
 
     public async Task BroadcastAsync(string message)
     {
-
-        var data = Encoding.UTF8.GetBytes(message);
-
-        foreach (var client in _clientsStorage.Clients)
+        try
         {
-            if (!client.TcpClient.Connected)
-            {
-                _clientManager.RemoveClient(client.Id);
-                continue;
-            }
+            var data = Encoding.UTF8.GetBytes(message);
 
-            await client.Stream.WriteAsync(data);
+            foreach (var client in _clientsStorage.Clients)
+            {
+                if (!client.TcpClient.Connected)
+                {
+                    _clientManager.RemoveClient(client.Id);
+                    continue;
+                }
+
+                await client.Stream.WriteAsync(data);
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, ex.Message);
         }
     }
 }
