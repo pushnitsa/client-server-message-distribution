@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Server.Host;
+using WebApp.Models;
 
 namespace WebApp.Controllers;
 
@@ -6,16 +8,18 @@ namespace WebApp.Controllers;
 [ApiController]
 public class BroadcastController : ControllerBase
 {
-    public BroadcastController()
-    {
+    private readonly IBroadcast _broadcastService;
 
+    public BroadcastController(IBroadcast broadcastService)
+    {
+        _broadcastService = broadcastService;
     }
 
-    [HttpGet("send")]
-    public IActionResult SendMessageToClients()
+    [HttpPost("send")]
+    public async Task<IActionResult> SendMessageToClients([FromBody] MessageModel messageModel)
     {
 
+        await _broadcastService.BroadcastAsync(messageModel.Message);
         return Ok();
     }
 }
-
