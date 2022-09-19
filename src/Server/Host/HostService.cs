@@ -3,21 +3,26 @@ using Server.Configuration;
 using Server.Manager;
 using System.Net;
 using System.Net.Sockets;
+using System.Text;
 
 namespace Server.Host;
 
-public class HostService : IHostService
+public class HostService : IHostService, IBroadcast
 {
     private TcpListener _tcpListener;
     private readonly ConnectionServerOptions _options;
     private readonly IClientManager _clientManager;
+    private readonly IHaveClients _clientsStorage;
 
     public HostService(
         IOptions<ConnectionServerOptions> serverOptions,
-        IClientManager clientManager)
+        IClientManager clientManager,
+        IHaveClients clientsStorage
+        )
     {
         _options = serverOptions.Value;
         _clientManager = clientManager;
+        _clientsStorage = clientsStorage;
     }
 
     public async Task ListenAsync(CancellationToken cancellationToken)
@@ -41,6 +46,23 @@ public class HostService : IHostService
         finally
         {
             _tcpListener.Stop();
+        }
+    }
+
+    public async Task BroadcastAsync(string message)
+    {
+
+        var data = Encoding.UTF8.GetBytes(message);
+
+        foreach (var client in _clientsStorage.Clients)
+        {
+            if (!client.TcpClient.Connected)
+            {
+                _clientManager.RemoveClient(client.Id);
+                continue;
+            }
+
+            await client.Stream.WriteAsync(data);
         }
     }
 }

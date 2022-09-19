@@ -1,17 +1,24 @@
-﻿using System.Collections.Immutable;
+﻿using Server.Host;
+using System.Collections.Immutable;
 using System.Net.Sockets;
 
 namespace Server.Manager;
-public class ClientManager : IClientManager
+public class ClientManager : IClientManager, IHaveClients
 {
     private readonly List<Client> _clients = new();
     private readonly object _lock = new();
+    private readonly Func<TcpClient, Client> _clientFactory;
+
+    public ClientManager(Func<TcpClient, Client> clientFactory)
+    {
+        _clientFactory = clientFactory;
+    }
 
     public void AddClient(TcpClient tcpClient)
     {
         lock (_lock)
         {
-            _clients.Add(new Client(tcpClient));
+            _clients.Add(_clientFactory(tcpClient));
         }
     }
 
