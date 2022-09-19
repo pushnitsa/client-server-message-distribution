@@ -11,6 +11,10 @@ insert_final_newline = true
 [*.xml]
 indent_size = 2
 
+# JSON files
+[*.json]
+indent_size = 2
+
 # C# files
 [*.cs]
 csharp_style_namespace_declarations = file_scoped
