@@ -46,6 +46,7 @@ public class HostService : IHostService, IBroadcast
         finally
         {
             _tcpListener.Stop();
+            _clientManager.DisconnectAllClients();
         }
     }
 
