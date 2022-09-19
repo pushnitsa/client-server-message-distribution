@@ -13,5 +13,3 @@ var chatClient = new ChatClient(host, port);
 chatClient.Start();
 
 Console.ReadLine();
-
-
