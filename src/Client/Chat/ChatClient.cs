@@ -5,40 +5,43 @@ namespace Client.Chat;
 
 public class ChatClient
 {
-    private const string _host = "127.0.0.1";
-    private const int _port = 8888;
+    private string _host;
+    private int _port;
 
-    private TcpClient _tcpClient;
-    private NetworkStream _stream;
+    public ChatClient(string? host, int? port)
+    {
+        _host = host ?? "127.0.0.1";
+        _port = port == null ? 8885 : (int)port;
+    }
 
     public void Start()
     {
-        _tcpClient = new TcpClient();
-
         try
         {
-            _tcpClient.Connect(_host, _port);
-            _stream = _tcpClient.GetStream();
+            var receiveTread1 = new Thread(new ThreadStart(ReceiveMessage));
+            receiveTread1.Start();
 
-            var receiveTread = new Thread(new ThreadStart(ReceiveMessage));
-            receiveTread.Start();
+            var receiveTread2 = new Thread(new ThreadStart(ReceiveMessage));
+            receiveTread2.Start();
 
-            SendMessage();
+            var receiveTread3 = new Thread(new ThreadStart(ReceiveMessage));
+            receiveTread3.Start();
         }
         catch (Exception ex)
         {
             Console.WriteLine(ex.ToString());
         }
-        finally
-        {
-            Disconnect();
-        }
     }
 
     private void ReceiveMessage()
     {
+        var tcpClient = new TcpClient();
+
         try
         {
+            tcpClient.Connect(_host, _port);
+            var stream = tcpClient.GetStream();
+
             while (true)
             {
 
@@ -48,10 +51,10 @@ public class ChatClient
 
                 do
                 {
-                    bytes = _stream.Read(data, 0, data.Length);
-                    sb.Append(Encoding.Unicode.GetString(data, 0, bytes));
+                    bytes = stream.Read(data, 0, data.Length);
+                    sb.Append(Encoding.UTF8.GetString(data, 0, bytes));
                 }
-                while (_stream.DataAvailable);
+                while (stream.DataAvailable);
 
                 Console.WriteLine(sb.ToString());
             }
@@ -62,24 +65,7 @@ public class ChatClient
         }
         finally
         {
-            Disconnect();
+            tcpClient?.Dispose();
         }
-    }
-
-    private void SendMessage()
-    {
-        Console.WriteLine("Your message:");
-
-        while (true)
-        {
-            var message = Console.ReadLine();
-            var data = Encoding.Unicode.GetBytes(message);
-            _stream.Write(data, 0, data.Length);
-        }
-    }
-
-    private void Disconnect()
-    {
-        _tcpClient?.Dispose();
     }
 }
