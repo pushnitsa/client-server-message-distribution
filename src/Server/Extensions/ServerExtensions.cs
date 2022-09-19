@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.Configuration;
-using Server;
 using Server.Configuration;
 using Server.Host;
 using Server.Manager;
+using Server.Models;
 using System.Net.Sockets;
 
 namespace Microsoft.Extensions.DependencyInjection;
