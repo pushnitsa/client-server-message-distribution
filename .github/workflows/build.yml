@@ -40,7 +40,7 @@ jobs:
         id: getVersion
         run: |
           cd ${{ env.WORK_PATH }}
-          echo "::set-output name=currentVersion::$( dotnet version --dry-run --output-format=json | jq .currentVersion )"
+          echo "::set-output name=currentVersion::$( dotnet version --dry-run --output-format=json | jq --raw-output .currentVersion )"
 
       - name: Current assembly version
         run: echo "Current version ${{ steps.getVersion.outputs.currentVersion }}"
@@ -48,7 +48,7 @@ jobs:
       - name: Build artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: web-app-with-distribution-server-${{ steps.getVersion.outputs.currentVersion }}
+          name: "web-app-with-distribution-server-${{ steps.getVersion.outputs.currentVersion }}"
           path: artifacts
 
       - name: Bump build WebApp version
