@@ -48,7 +48,7 @@ jobs:
       - name: Build artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: web-app-with-distribution-server
+          name: web-app-with-distribution-server-${{ steps.getVersion.outputs.currentVersion }}
           path: artifacts
 
       - name: Bump build WebApp version
