@@ -42,6 +42,9 @@ jobs:
           cd ${{ env.WORK_PATH }}
           echo "::set-output name=currentVersion::$( dotnet version --dry-run --output-format=json | jq .currentVersion )"
 
+      - name: Current assembly version
+        run: echo "Current version ${{ steps.getVersion.outputs.currentVersion }}"
+
       - name: Build artifacts
         uses: actions/upload-artifact@v3
         with:
