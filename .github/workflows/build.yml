@@ -1,8 +1,8 @@
 name: Build
 
 on:
-  push:
-    branches: [ main ]
+#  push:
+#    branches: [ main ]
   workflow_dispatch:
 
 jobs:
@@ -25,13 +25,13 @@ jobs:
         run: dotnet build --no-restore
 
       - name: Publish
-        run: dotnet publish src/WebApp/WebApp.csproj --configuration=Release -o dist
+        run: dotnet publish src/WebApp/WebApp.csproj --configuration=Release -o artifacts
 
       - name: Build artifacts
         uses: actions/upload-artifact@v3
         with:
           name: web-app-with-distribution-server
-          path: dist
+          path: artifacts
 
       - name: Bump build WebApp version
         id: bump-webapp
