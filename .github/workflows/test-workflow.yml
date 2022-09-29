@@ -31,7 +31,10 @@ jobs:
       - name: Install dotnet-version
         run: dotnet tool install -g dotnet-version-cli
 
+      - name: Install jq
+        run: apt-get install jq
+
       - name: Get version
         run: |
           cd src/WebApp
-          dotnet version --dry-run
+          dotnet version --dry-run --output-format=json | jq .currentVersion
