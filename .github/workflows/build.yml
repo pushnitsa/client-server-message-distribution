@@ -25,7 +25,7 @@ jobs:
         run: dotnet build --no-restore
 
       - name: Publish
-        run: dotnet publish src/WebApp/WebApp.csproj --configuration=Release -o dist --no-build
+        run: dotnet publish src/WebApp/WebApp.csproj --configuration=Release -o dist
 
       - name: Build artifacts
         uses: actions/upload-artifact@v3
