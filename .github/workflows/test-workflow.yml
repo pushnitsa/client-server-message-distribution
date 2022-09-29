@@ -38,7 +38,7 @@ jobs:
         id: getVersion
         run: |
           cd src/WebApp
-          echo ""::set-output name=currentVersion::$( dotnet version --dry-run --output-format=json | jq .currentVersion )"
+          echo "::set-output name=currentVersion::$( dotnet version --dry-run --output-format=json | jq .currentVersion )"
 
       - name: Use currentVersion
         run: echo "Current version is v${{ steps.getVersion.outputs.currentVersion }}"
