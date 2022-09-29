@@ -1,0 +1,15 @@
+name: Test passing data through steps
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    name: Test passing data
+    steps:
+      - name: Echo 1
+        id: test1
+        run: echo "::set-output name=author::${{ github.actor }}"
+      - name: Echo 2
+        run: echo ${{ steps.test1.outputs.author }}
