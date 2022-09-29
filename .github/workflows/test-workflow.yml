@@ -34,4 +34,4 @@ jobs:
       - name: Get version
         run: |
           cd src/WebApp
-          dotnet version
+          dotnet version --dry-run
