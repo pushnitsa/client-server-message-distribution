@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
     name: Build message distribution server
     steps:
@@ -23,6 +23,15 @@ jobs:
 
       - name: Build
         run: dotnet build --no-restore
+
+      - name: Publish
+        run: dotnet publish src\WebApp\WebApp.csproj --configuration=Release -o dist --no-build
+
+      - name: Build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: web-app-with-distribution-server
+          path: dist
 
       - name: Bump build WebApp version
         id: bump-webapp
