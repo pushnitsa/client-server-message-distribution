@@ -1,4 +1,4 @@
-name: Bump build version
+name: Build
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    name: Build and bump version
+    name: Build message distribution server
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -22,7 +22,7 @@ jobs:
         run: dotnet restore
 
       - name: Build
-        run: dotnet build
+        run: dotnet build --no-restore
 
       - name: Bump build WebApp version
         id: bump-webapp
