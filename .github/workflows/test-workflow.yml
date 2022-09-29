@@ -35,6 +35,10 @@ jobs:
         run: sudo apt-get install jq
 
       - name: Get version
+        id: getVersion
         run: |
           cd src/WebApp
-          dotnet version --dry-run --output-format=json | jq .currentVersion
+          echo ""::set-output name=currentVersion::$( dotnet version --dry-run --output-format=json | jq .currentVersion )"
+
+      - name: Use currentVersion
+        run: echo "Current version is v${{ steps.getVersion.outputs.currentVersion }}"
