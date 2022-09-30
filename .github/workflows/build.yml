@@ -51,20 +51,25 @@ jobs:
           git tag v${{ steps.getVersion.outputs.currentVersion }}
           git push origin --tags
 
-      - name: Build artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: web-app-with-distribution-server-${{ steps.getVersion.outputs.currentVersion }}
-          path: artifacts
+      #- name: Build artifacts
+      #  uses: actions/upload-artifact@v3
+      #  with:
+      #    name: web-app-with-distribution-server-${{ steps.getVersion.outputs.currentVersion }}
+      #    path: artifacts
+      #
+      #- name: Download artifacts
+      #  uses: actions/download-artifact@v3
+      #  with:
+      #    name: web-app-with-distribution-server-${{ steps.getVersion.outputs.currentVersion }}
+      #    path: ~/artifacts
 
-      - name: Download artifacts
-        uses: actions/download-artifact@v3
-        with:
-          name: web-app-with-distribution-server-${{ steps.getVersion.outputs.currentVersion }}
-          path: ~/artifacts
+      - name: Create asset
+        run: |
+          mkdir ~/assets
+          zip -r ~/assets/message-distribution-server-${{ steps.getVersion.outputs.currentVersion }}.zip artifacts
         
       - name: Create release
-        run: gh release create v${{ steps.getVersion.outputs.currentVersion }} "~/artifacts/web-app-with-distribution-server-${{ steps.getVersion.outputs.currentVersion }}.zip#Message distribution server v${{ steps.getVersion.outputs.currentVersion }}" --generate-notes -p
+        run: gh release create v${{ steps.getVersion.outputs.currentVersion }} "~/assets/message-distribution-server-${{ steps.getVersion.outputs.currentVersion }}.zip#Message distribution server v${{ steps.getVersion.outputs.currentVersion }}" --generate-notes -p
 
       - name: Bump build WebApp version
         id: bump-webapp
