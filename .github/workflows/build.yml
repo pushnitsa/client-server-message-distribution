@@ -3,6 +3,10 @@ name: Build
 on:
   push:
     branches: [ main ]
+    paths-ignore:
+    - '.github/**'
+    - 'README.md'
+    - 'docs/**'
 
 jobs:
   build:
