@@ -61,9 +61,10 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: web-app-with-distribution-server-${{ steps.getVersion.outputs.currentVersion }}
+          path: ~/artifacts
         
       - name: Create release
-        run: gh release create v${{ steps.getVersion.outputs.currentVersion }} "web-app-with-distribution-server-${{ steps.getVersion.outputs.currentVersion }}.zip#Message distribution server v${{ steps.getVersion.outputs.currentVersion }}" --generate-notes -p
+        run: gh release create v${{ steps.getVersion.outputs.currentVersion }} "~/artifacts/web-app-with-distribution-server-${{ steps.getVersion.outputs.currentVersion }}.zip#Message distribution server v${{ steps.getVersion.outputs.currentVersion }}" --generate-notes -p
 
       - name: Bump build WebApp version
         id: bump-webapp
