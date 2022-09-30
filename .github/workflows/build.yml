@@ -56,6 +56,9 @@ jobs:
           name: "web-app-with-distribution-server-${{ steps.getVersion.outputs.currentVersion }}"
           path: artifacts
 
+      - name: Create release
+        run: gh release create v${{ steps.getVersion.outputs.currentVersion }} --generate-notes
+
       - name: Bump build WebApp version
         id: bump-webapp
         uses: vers-one/dotnet-project-version-updater@v1.0
