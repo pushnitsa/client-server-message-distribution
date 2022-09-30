@@ -65,11 +65,12 @@ jobs:
 
       - name: Create asset
         run: |
-          mkdir ~/assets
-          zip -r ~/assets/message-distribution-server-${{ steps.getVersion.outputs.currentVersion }}.zip artifacts
+          mkdir /tmp/assets
+          zip -r /tmp/assets/message-distribution-server-${{ steps.getVersion.outputs.currentVersion }}.zip artifacts
+          ls -la /tmp/assets
         
       - name: Create release
-        run: gh release create v${{ steps.getVersion.outputs.currentVersion }} "~/assets/message-distribution-server-${{ steps.getVersion.outputs.currentVersion }}.zip#Message distribution server v${{ steps.getVersion.outputs.currentVersion }}" --generate-notes -p
+        run: gh release create v${{ steps.getVersion.outputs.currentVersion }} "/tmp/assets/message-distribution-server-${{ steps.getVersion.outputs.currentVersion }}.zip#Message distribution server v${{ steps.getVersion.outputs.currentVersion }}" --generate-notes -p
 
       - name: Bump build WebApp version
         id: bump-webapp
