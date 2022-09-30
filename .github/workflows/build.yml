@@ -51,18 +51,6 @@ jobs:
           git tag v${{ steps.getVersion.outputs.currentVersion }}
           git push origin --tags
 
-      #- name: Build artifacts
-      #  uses: actions/upload-artifact@v3
-      #  with:
-      #    name: web-app-with-distribution-server-${{ steps.getVersion.outputs.currentVersion }}
-      #    path: artifacts
-      #
-      #- name: Download artifacts
-      #  uses: actions/download-artifact@v3
-      #  with:
-      #    name: web-app-with-distribution-server-${{ steps.getVersion.outputs.currentVersion }}
-      #    path: ~/artifacts
-
       - name: Create asset
         run: |
           mkdir /tmp/assets
