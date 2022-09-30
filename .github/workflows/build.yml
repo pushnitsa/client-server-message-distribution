@@ -58,7 +58,7 @@ jobs:
           ls -la /tmp/assets
         
       - name: Create release
-        run: gh release create v${{ steps.getVersion.outputs.currentVersion }} "/tmp/assets/message-distribution-server-${{ steps.getVersion.outputs.currentVersion }}.zip#Message distribution server v${{ steps.getVersion.outputs.currentVersion }}" --generate-notes -p
+        run: gh release create v${{ steps.getVersion.outputs.currentVersion }} "/tmp/assets/message-distribution-server-${{ steps.getVersion.outputs.currentVersion }}.zip#Message distribution server v${{ steps.getVersion.outputs.currentVersion }}" --generate-notes
 
       - name: Bump build WebApp version
         id: bump-webapp
