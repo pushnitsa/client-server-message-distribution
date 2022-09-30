@@ -10,6 +10,7 @@ jobs:
     env:
       WORK_PATH: src/WebApp
       PROJECT_NAME: WebApp.csproj
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     runs-on: ubuntu-latest
     name: Build message distribution server
     steps:
